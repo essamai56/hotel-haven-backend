@@ -86,6 +86,14 @@ npm run dev
 
 O servidor estará rodando na porta 3001 (ou na porta definida na variável de ambiente PORT).
 
+## usar backend 
+```
+Para executar o backend:
+
+Navegue até a pasta do projeto: cd src/pages/api
+Instale as dependências: npm install
+Inicie o servidor: npm run dev
+O servidor estará rodando na porta 3001 e conectado ao seu banco de dados Supabase. O código implementa todas as funcionalidades solicitadas: busca de hotéis, obtenção de detalhes de hotéis específicos e sistema de reservas.```
 ## Desenvolvimento
 
 Para desenvolvimento, o projeto utiliza nodemon para reinicialização automática do servidor quando houver alterações no código:
