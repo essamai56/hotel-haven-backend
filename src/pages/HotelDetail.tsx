@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { toast } from '@/components/ui/use-toast';
-import { ArrowLeft, Wifi, Pool, Restaurant, Star, MapPin, Coffee, Check, X } from 'lucide-react';
+import { ArrowLeft, Wifi, Bath, Utensils, Star, MapPin, Coffee, Check, X } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import RoomCard from '@/components/RoomCard';
 import MainLayout from '@/layouts/MainLayout';
@@ -81,8 +81,8 @@ const HotelDetail = () => {
 
   const getAmenityIcon = (nome: string) => {
     if (nome.includes('Wi-Fi')) return <Wifi className="h-5 w-5" />;
-    if (nome.includes('Piscina')) return <Pool className="h-5 w-5" />;
-    if (nome.includes('Restaurante')) return <Restaurant className="h-5 w-5" />;
+    if (nome.includes('Piscina')) return <Bath className="h-5 w-5" />;
+    if (nome.includes('Restaurante')) return <Utensils className="h-5 w-5" />;
     if (nome.includes('café')) return <Coffee className="h-5 w-5" />;
     return <Check className="h-5 w-5" />;
   };
