@@ -1,73 +1,113 @@
-# Welcome to your Lovable project
 
-## Project info
+# Hotel Haven Backend
 
-**URL**: https://lovable.dev/projects/250aff2c-1046-42d0-9cad-f933781affa1
+Este é o backend para um sistema de reserva de hotéis que se integra com um banco de dados Supabase.
 
-## How can I edit this code?
+## Funcionalidades
 
-There are several ways of editing your application.
+- Pesquisar hotéis disponíveis
+- Obter detalhes específicos de um hotel selecionado
+- Visualizar quartos disponíveis
+- Fazer reservas em quartos de hotéis
 
-**Use Lovable**
+## Tecnologias Utilizadas
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/250aff2c-1046-42d0-9cad-f933781affa1) and start prompting.
+- **Node.js**: Ambiente de execução JavaScript
+- **Express.js**: Framework web para Node.js
+- **Supabase**: Backend-as-a-Service baseado em PostgreSQL
+- **Cors**: Middleware para habilitar CORS (Cross-Origin Resource Sharing)
+- **Dotenv**: Carregamento de variáveis de ambiente
 
-Changes made via Lovable will be committed automatically to this repo.
+## Estrutura do Banco de Dados
 
-**Use your preferred IDE**
+O sistema utiliza diversas tabelas no Supabase, incluindo:
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+- **Hotel**: Armazena informações sobre os hotéis
+- **Quarto**: Contém detalhes sobre os quartos disponíveis
+- **Reserva**: Registra as reservas feitas pelos clientes
+- **Cliente**: Informações dos clientes
+- **Comodidade**: Recursos disponíveis nos hotéis e quartos
+- E outras tabelas relacionadas para políticas, detalhes e relacionamentos
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+## Estrutura do Projeto
 
-Follow these steps:
+```
+hotel-haven-backend/
+│
+├── server.js           # Ponto de entrada da aplicação
+├── .env                # Variáveis de ambiente
+├── package.json        # Dependências e scripts
+└── README.md           # Documentação
+```
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+## Rotas da API
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+### Hotéis
+- `GET /api/hotels` - Retorna todos os hotéis
+- `GET /api/hotels/:id` - Retorna detalhes de um hotel específico
 
-# Step 3: Install the necessary dependencies.
-npm i
+### Quartos
+- `GET /api/rooms/:id` - Retorna detalhes de um quarto específico
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+### Reservas
+- `POST /api/reservations` - Cria uma nova reserva
+
+## Como Executar
+
+### Pré-requisitos
+- Node.js (v14 ou superior)
+- npm ou yarn
+
+### Passos para Execução
+
+1. Clone o repositório:
+```
+git clone <url-do-repositorio>
+```
+
+2. Navegue até a pasta do projeto:
+```
+cd hotel-haven-backend
+```
+
+3. Instale as dependências:
+```
+npm install
+```
+
+4. Configure as variáveis de ambiente:
+   - Crie um arquivo `.env` baseado no `.env.example`
+   - Adicione suas credenciais do Supabase
+
+5. Inicie o servidor:
+```
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+O servidor estará rodando na porta 3001 (ou na porta definida na variável de ambiente PORT).
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## Desenvolvimento
 
-**Use GitHub Codespaces**
+Para desenvolvimento, o projeto utiliza nodemon para reinicialização automática do servidor quando houver alterações no código:
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+```
+npm run dev
+```
 
-## What technologies are used for this project?
+## Requisitos da API
 
-This project is built with:
+Para consumir a API de reservas, o cliente deve fornecer os seguintes dados:
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+- `id_cliente`: ID do cliente que está fazendo a reserva
+- `id_quarto`: ID do quarto a ser reservado
+- `data_checkin`: Data de entrada no formato YYYY-MM-DD
+- `data_checkout`: Data de saída no formato YYYY-MM-DD
+- `numero_adultos`: Número de adultos
+- `numero_criancas`: Número de crianças (opcional)
+- `preco_total`: Preço total da reserva
+- `observacoes`: Observações adicionais (opcional)
+- `pedido_especial`: Pedidos especiais (opcional)
 
-## How can I deploy this project?
+## Licença
 
-Simply open [Lovable](https://lovable.dev/projects/250aff2c-1046-42d0-9cad-f933781affa1) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+Este projeto está licenciado sob a licença ISC.
