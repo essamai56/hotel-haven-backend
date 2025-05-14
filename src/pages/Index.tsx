@@ -1,12 +1,12 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import HotelCard from '@/components/HotelCard';
 import { toast } from '@/components/ui/use-toast';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Search } from 'lucide-react';
+import { Search, SearchX } from 'lucide-react';
 import MainLayout from '@/layouts/MainLayout';
 
 interface Hotel {
@@ -23,6 +23,7 @@ interface Hotel {
 const Index = () => {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
+  const [filteredHotels, setFilteredHotels] = useState<Hotel[]>([]);
   
   const { data: hotels, isLoading, isError } = useQuery({
     queryKey: ['hotels'],
@@ -45,13 +46,29 @@ const Index = () => {
     }
   });
 
-  const filteredHotels = hotels?.filter((hotel: Hotel) => 
-    hotel.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    hotel.endereco.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  // Atualiza os hotéis filtrados sempre que os dados ou o termo de pesquisa mudam
+  useEffect(() => {
+    if (hotels) {
+      if (!searchTerm.trim()) {
+        setFilteredHotels(hotels);
+      } else {
+        const searchTermLower = searchTerm.toLowerCase();
+        const filtered = hotels.filter((hotel: Hotel) => 
+          hotel.nome?.toLowerCase().includes(searchTermLower) ||
+          hotel.endereco?.toLowerCase().includes(searchTermLower) ||
+          hotel.descricao?.toLowerCase().includes(searchTermLower)
+        );
+        setFilteredHotels(filtered);
+      }
+    }
+  }, [hotels, searchTerm]);
 
   const viewHotelDetails = (id: number) => {
     navigate(`/hotel/${id}`);
+  };
+
+  const clearSearch = () => {
+    setSearchTerm("");
   };
 
   if (isLoading) {
@@ -90,16 +107,28 @@ const Index = () => {
           
           <div className="relative max-w-md mx-auto">
             <Input
-              placeholder="Pesquisar por nome ou localização..."
+              placeholder="Pesquisar por nome, localização ou descrição..."
               className="pl-10 py-6"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+            
+            {searchTerm && (
+              <Button
+                variant="ghost"
+                size="icon"
+                className="absolute right-2 top-1/2 transform -translate-y-1/2"
+                onClick={clearSearch}
+                aria-label="Limpar pesquisa"
+              >
+                <SearchX className="h-5 w-5" />
+              </Button>
+            )}
           </div>
         </div>
 
-        <h2 className="text-2xl font-bold mb-6">Hotéis disponíveis</h2>
+        <h2 className="text-2xl font-bold mb-6">Hotéis disponíveis {filteredHotels?.length > 0 ? `(${filteredHotels.length})` : ''}</h2>
 
         {filteredHotels && filteredHotels.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -114,7 +143,7 @@ const Index = () => {
         ) : (
           <div className="text-center py-10 bg-white rounded-lg shadow">
             <h2 className="text-2xl font-semibold text-gray-600">Nenhum hotel encontrado</h2>
-            <p className="mt-2 text-gray-500">Tente modificar sua pesquisa</p>
+            <p className="mt-2 text-gray-500">Tente modificar sua pesquisa ou {hotels?.length > 0 && <Button variant="link" onClick={clearSearch}>limpar a pesquisa</Button>}</p>
           </div>
         )}
       </div>
