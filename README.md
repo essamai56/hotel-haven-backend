@@ -1,124 +1,141 @@
 
-# Hotel Haven Backend
+# Hotel Haven - Frontend
 
-Este é o backend para um sistema de reserva de hotéis que se integra com um banco de dados Supabase.
+## Visão Geral
 
-## Funcionalidades
-
-- Pesquisar hotéis disponíveis
-- Obter detalhes específicos de um hotel selecionado
-- Visualizar quartos disponíveis
-- Fazer reservas em quartos de hotéis
+Hotel Haven é uma aplicação web para busca e reserva de hotéis. Este repositório contém o código frontend do sistema, desenvolvido com React, Vite, TypeScript e integrado com Tailwind CSS. A aplicação se conecta ao backend para obter e manipular dados de hotéis, quartos e reservas.
 
 ## Tecnologias Utilizadas
 
-- **Node.js**: Ambiente de execução JavaScript
-- **Express.js**: Framework web para Node.js
-- **Supabase**: Backend-as-a-Service baseado em PostgreSQL
-- **Cors**: Middleware para habilitar CORS (Cross-Origin Resource Sharing)
-- **Dotenv**: Carregamento de variáveis de ambiente
-
-## Estrutura do Banco de Dados
-
-O sistema utiliza diversas tabelas no Supabase, incluindo:
-
-- **Hotel**: Armazena informações sobre os hotéis
-- **Quarto**: Contém detalhes sobre os quartos disponíveis
-- **Reserva**: Registra as reservas feitas pelos clientes
-- **Cliente**: Informações dos clientes
-- **Comodidade**: Recursos disponíveis nos hotéis e quartos
-- E outras tabelas relacionadas para políticas, detalhes e relacionamentos
+- **React**: Biblioteca JavaScript para construção de interfaces
+- **Vite**: Ferramenta de build moderna e rápida
+- **TypeScript**: Superset tipado de JavaScript
+- **Tailwind CSS**: Framework CSS utilitário
+- **React Router**: Roteamento para aplicações React
+- **React Query**: Gerenciamento de estado e cache de dados
+- **React Hook Form**: Gerenciamento de formulários
+- **Shadcn/UI**: Componentes de UI reutilizáveis
+- **Lucide React**: Biblioteca de ícones
 
 ## Estrutura do Projeto
 
 ```
-hotel-haven-backend/
+hotel-haven-frontend/
 │
-├── server.js           # Ponto de entrada da aplicação
-├── .env                # Variáveis de ambiente
-├── package.json        # Dependências e scripts
-└── README.md           # Documentação
+├── src/
+│   ├── components/         # Componentes reutilizáveis
+│   │   ├── HotelCard.tsx   # Card de exibição de hotel
+│   │   ├── RoomCard.tsx    # Card de exibição de quarto
+│   │   ├── ReservationForm.tsx # Formulário de reserva
+│   │   └── ui/             # Componentes de UI (shadcn)
+│   │
+│   ├── pages/              # Páginas da aplicação
+│   │   ├── Index.tsx       # Página inicial com lista de hotéis
+│   │   ├── HotelDetail.tsx # Página de detalhes do hotel
+│   │   ├── ReservationConfirmation.tsx # Página de confirmação de reserva
+│   │   └── NotFound.tsx    # Página 404
+│   │
+│   ├── hooks/              # Custom hooks
+│   │   └── use-toast.ts    # Hook para notificações toast
+│   │
+│   ├── lib/                # Utilitários
+│   │   └── utils.ts        # Funções utilitárias
+│   │
+│   ├── App.tsx             # Componente principal e configuração de rotas
+│   └── main.tsx            # Entry point
+│
+├── public/                 # Arquivos estáticos
+├── index.html              # Arquivo HTML principal
+├── tailwind.config.js      # Configuração do Tailwind CSS
+├── tsconfig.json           # Configuração do TypeScript
+└── vite.config.js          # Configuração do Vite
 ```
 
-## Rotas da API
+## Funcionalidades
 
-### Hotéis
-- `GET /api/hotels` - Retorna todos os hotéis
-- `GET /api/hotels/:id` - Retorna detalhes de um hotel específico
+1. **Navegação e Listagem de Hotéis**
+   - Visualização de todos os hotéis cadastrados
+   - Filtragem por nome ou localização
+   - Apresentação de informações básicas como classificação, preço e descrição
 
-### Quartos
-- `GET /api/rooms/:id` - Retorna detalhes de um quarto específico
+2. **Detalhes do Hotel**
+   - Visualização de informações detalhadas sobre o hotel
+   - Abas para navegação entre informações gerais, quartos disponíveis e políticas do hotel
+   - Lista de comodidades disponíveis
 
-### Reservas
-- `POST /api/reservations` - Cria uma nova reserva
+3. **Reserva de Quartos**
+   - Formulário para seleção de datas de check-in e check-out
+   - Cálculo automático de preço com base no número de noites
+   - Possibilidade de especificar número de adultos e crianças
+   - Espaço para pedidos especiais e observações
 
 ## Como Executar
 
 ### Pré-requisitos
+
 - Node.js (v14 ou superior)
 - npm ou yarn
+- Backend do Hotel Haven rodando (na porta 3001)
 
 ### Passos para Execução
 
 1. Clone o repositório:
-```
+```bash
 git clone <url-do-repositorio>
 ```
 
 2. Navegue até a pasta do projeto:
-```
-cd hotel-haven-backend
+```bash
+cd hotel-haven-frontend
 ```
 
 3. Instale as dependências:
-```
+```bash
 npm install
+# ou
+yarn
 ```
 
-4. Configure as variáveis de ambiente:
-   - Crie um arquivo `.env` baseado no `.env.example`
-   - Adicione suas credenciais do Supabase
-
-5. Inicie o servidor:
+4. Inicie o servidor de desenvolvimento:
+```bash
+npm run dev
+# ou
+yarn dev
 ```
+
+5. Acesse a aplicação no navegador:
+```
+http://localhost:8080
+```
+
+### Importante
+
+Certifique-se de que o servidor backend está rodando na porta 3001 antes de iniciar o frontend. Para iniciar o backend:
+
+```bash
+cd src/pages/api
+npm install  # se ainda não tiver instalado as dependências
 npm run dev
 ```
 
-O servidor estará rodando na porta 3001 (ou na porta definida na variável de ambiente PORT).
+## Fluxo de Uso
 
-## usar backend 
-```
-Para executar o backend:
+1. Na página inicial, o usuário pode ver a lista de hotéis disponíveis e filtrar por nome ou localização.
+2. Ao clicar em um hotel, o usuário é direcionado para a página de detalhes do hotel.
+3. Na página de detalhes, o usuário pode navegar entre informações gerais, quartos disponíveis e políticas do hotel.
+4. Para fazer uma reserva, o usuário clica em "Reservar Agora" no quarto desejado.
+5. No modal de reserva, o usuário preenche os dados necessários, seleciona as datas e confirma a reserva.
+6. Após a confirmação, o usuário recebe uma notificação de sucesso.
 
-Navegue até a pasta do projeto: cd src/pages/api
-Instale as dependências: npm install
-Inicie o servidor: npm run dev
-O servidor estará rodando na porta 3001 e conectado ao seu banco de dados Supabase. O código implementa todas as funcionalidades solicitadas: busca de hotéis, obtenção de detalhes de hotéis específicos e sistema de reservas.
-```
+## Contribuição
 
+Para contribuir com o projeto:
 
-
-## Desenvolvimento
-
-Para desenvolvimento, o projeto utiliza nodemon para reinicialização automática do servidor quando houver alterações no código:
-
-```
-npm run dev
-```
-
-## Requisitos da API
-
-Para consumir a API de reservas, o cliente deve fornecer os seguintes dados:
-
-- `id_cliente`: ID do cliente que está fazendo a reserva
-- `id_quarto`: ID do quarto a ser reservado
-- `data_checkin`: Data de entrada no formato YYYY-MM-DD
-- `data_checkout`: Data de saída no formato YYYY-MM-DD
-- `numero_adultos`: Número de adultos
-- `numero_criancas`: Número de crianças (opcional)
-- `preco_total`: Preço total da reserva
-- `observacoes`: Observações adicionais (opcional)
-- `pedido_especial`: Pedidos especiais (opcional)
+1. Faça um fork do repositório
+2. Crie uma branch para sua feature (`git checkout -b feature/nova-feature`)
+3. Faça commit das suas alterações (`git commit -m 'Adiciona nova feature'`)
+4. Envie para a branch (`git push origin feature/nova-feature`)
+5. Abra um Pull Request
 
 ## Licença
 
