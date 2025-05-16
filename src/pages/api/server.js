@@ -16,15 +16,29 @@ const supabaseUrl = "https://gdgqpcedobedkyhjbuku.supabase.co";
 const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdkZ3FwY2Vkb2JlZGt5aGpidWt1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDM4ODgxODUsImV4cCI6MjA1OTQ2NDE4NX0.vC7T9OVRydDdjaDHOJ26uPKwesDM86MPh-jVeOg_yt4";
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-// Rota para buscar todos os hotéis
+// Rota para buscar todos os hotéis com opção de pesquisa
 app.get('/api/hotels', async (req, res) => {
   try {
-    const { data: hotels, error } = await supabase
-      .from('Hotel')
-      .select('*');
+    let query = supabase.from('Hotel').select('*');
+    
+    // Se houver um parâmetro de pesquisa, filtra os resultados
+    const { search } = req.query;
+    if (search) {
+      console.log(`Pesquisando por: ${search}`);
+      
+      // Pesquisa em vários campos usando o operador ilike (case insensitive)
+      query = query.or(
+        `nome.ilike.%${search}%,` +
+        `endereco.ilike.%${search}%,` +
+        `descricao.ilike.%${search}%`
+      );
+    }
+    
+    const { data: hotels, error } = await query;
     
     if (error) throw error;
     
+    console.log(`Encontrados ${hotels?.length || 0} hotéis`);
     res.status(200).json(hotels);
   } catch (error) {
     console.error('Erro ao buscar hotéis:', error);
