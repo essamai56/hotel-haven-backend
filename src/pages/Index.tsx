@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
@@ -53,7 +52,10 @@ const Index = () => {
         if (!response.ok) {
           throw new Error('Erro ao carregar hotéis');
         }
-        return response.json();
+        
+        const data = await response.json();
+        console.log('Hotéis recebidos:', data);
+        return data;
       } catch (error) {
         console.error('Erro ao buscar hotéis:', error);
         toast({
@@ -69,6 +71,7 @@ const Index = () => {
   // Atualiza os hotéis filtrados quando os dados forem carregados
   useEffect(() => {
     if (hotels) {
+      console.log('Atualizando hotéis filtrados:', hotels);
       setFilteredHotels(hotels);
     }
   }, [hotels]);

@@ -21,18 +21,24 @@ interface HotelCardProps {
 }
 
 const HotelCard: React.FC<HotelCardProps> = ({ hotel, onClick }) => {
+  // Definindo uma imagem padrão para quando a URL da imagem estiver ausente ou falhar
   const defaultImage = "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=800&q=80";
+
+  // Função para tratar erros de carregamento de imagem
+  const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+    console.log("Erro ao carregar imagem:", hotel.imagem_url);
+    (e.target as HTMLImageElement).src = defaultImage;
+  };
 
   return (
     <Card className="overflow-hidden hover:shadow-lg transition-shadow">
       <div className="h-48 overflow-hidden">
         <img 
-          src={hotel.imagem_url || defaultImage} 
+          src={hotel.imagem_url || defaultImage}
           alt={hotel.nome} 
           className="w-full h-full object-cover"
-          onError={(e) => {
-            (e.target as HTMLImageElement).src = defaultImage;
-          }}
+          onError={handleImageError}
+          loading="lazy"
         />
       </div>
       <CardHeader>
