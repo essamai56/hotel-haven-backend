@@ -23,13 +23,33 @@ interface Hotel {
 const Index = () => {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
   const [filteredHotels, setFilteredHotels] = useState<Hotel[]>([]);
   
+  // Debounce para o termo de pesquisa
+  useEffect(() => {
+    const timerId = setTimeout(() => {
+      setDebouncedSearchTerm(searchTerm);
+    }, 500); // Aguarda 500ms para atualizar o termo de pesquisa
+
+    return () => {
+      clearTimeout(timerId);
+    };
+  }, [searchTerm]);
+  
+  // Consulta que inclui o termo de pesquisa
   const { data: hotels, isLoading, isError } = useQuery({
-    queryKey: ['hotels'],
+    queryKey: ['hotels', debouncedSearchTerm],
     queryFn: async () => {
       try {
-        const response = await fetch('http://localhost:3001/api/hotels');
+        const baseUrl = 'http://localhost:3001/api/hotels';
+        const url = debouncedSearchTerm 
+          ? `${baseUrl}?search=${encodeURIComponent(debouncedSearchTerm)}` 
+          : baseUrl;
+          
+        console.log('Fazendo requisição para:', url);
+        const response = await fetch(url);
+        
         if (!response.ok) {
           throw new Error('Erro ao carregar hotéis');
         }
@@ -46,22 +66,12 @@ const Index = () => {
     }
   });
 
-  // Atualiza os hotéis filtrados sempre que os dados ou o termo de pesquisa mudam
+  // Atualiza os hotéis filtrados quando os dados forem carregados
   useEffect(() => {
     if (hotels) {
-      if (!searchTerm.trim()) {
-        setFilteredHotels(hotels);
-      } else {
-        const searchTermLower = searchTerm.toLowerCase();
-        const filtered = hotels.filter((hotel: Hotel) => 
-          hotel.nome?.toLowerCase().includes(searchTermLower) ||
-          hotel.endereco?.toLowerCase().includes(searchTermLower) ||
-          hotel.descricao?.toLowerCase().includes(searchTermLower)
-        );
-        setFilteredHotels(filtered);
-      }
+      setFilteredHotels(hotels);
     }
-  }, [hotels, searchTerm]);
+  }, [hotels]);
 
   const viewHotelDetails = (id: number) => {
     navigate(`/hotel/${id}`);
